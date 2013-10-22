@@ -1,0 +1,24 @@
+# Managed by Chef for <%= node[:hostname] %>
+ 
+<VirtualHost *:80>
+    ServerAdmin <%= node[:apache][:contact] %>
+ 
+    DocumentRoot /var/www/vhosts/project/public 
+    <Directory />
+        Options FollowSymLinks
+        AllowOverride None
+    </Directory>
+    <Directory /var/www/vhosts/project/public/>
+        Options Indexes FollowSymLinks MultiViews
+        AllowOverride All
+        Order allow,deny
+        allow from all
+    </Directory>
+ 
+    ErrorLog <%= node[:apache][:log_dir] %>/error.log
+ 
+    LogLevel warn
+ 
+    CustomLog <%= node[:apache][:log_dir] %>/access.log combined
+    ServerSignature Off
+</VirtualHost>

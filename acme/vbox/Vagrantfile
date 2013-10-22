@@ -1,0 +1,41 @@
+# All Vagrant configuration is done here. For a complete reference,
+# of configuration items see the online documentation at vagrantup.com.
+ 
+Vagrant.configure("2") do |config|
+ 
+  # Project name
+  config.vm.hostname = "acme"
+ 
+  # Vagrant box name
+  config.vm.box = "precise64"
+ 
+  # The url from where the 'config.vm.box' box will be fetched if it
+  # doesn't already exist on the user's system.
+  config.vm.box_url = "http://files.vagrantup.com/precise64.box"
+ 
+  # Create a forwarded port mapping which allows access to a specific port
+  # within the machine from a port on the host machine.
+ 
+  # This will link http://localhost:8080/ to your virtual machine
+  config.vm.network :forwarded_port, guest: 80, host: 8080
+ 
+  # Share an additional folder to the guest VM. The first argument is
+  # the path on the host to the actual folder. The second argument is
+  # the path on the guest to mount the folder. And the optional third
+  # argument is a set of non-required options.
+ 
+  # This shared folder will be the project's root directory
+  config.vm.synced_folder "../project", "/var/www/vhosts/project/"
+ 
+  # Enable Berkshelf
+  config.berkshelf.enabled = true
+ 
+  # Load your recipes
+  config.vm.provision :chef_solo do |chef|
+    chef.run_list = [
+      "recipe[apt]",
+      "recipe[acme::apache2]",
+      "recipe[acme::php5]"
+    ]
+  end
+end
